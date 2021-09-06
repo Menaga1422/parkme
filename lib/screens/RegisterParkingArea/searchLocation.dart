@@ -1,7 +1,7 @@
 //@dart=2.9
 
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:geocoding/geocoding.dart' as geoCo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkme/theme.dart';
 
@@ -31,19 +31,20 @@ class _SearchLocationState extends State<SearchLocation> {
               onTap: (pos)=>addMarker(pos),
           ),
           Positioned(
-              top: 30.0,
+              top: 80.0,
               right: 15.0,
               left: 15.0,
               child: Container(
                 height: 50.0,
                 width: double.infinity,
                 decoration: BoxDecoration(
+                  border: Border.all(color: kPrimaryColor),
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white,
                 ),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: "Enter Address",
+                    hintText: searchAddress,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15.0,top: 15.0),
                     suffixIcon: IconButton(
@@ -60,7 +61,7 @@ class _SearchLocationState extends State<SearchLocation> {
                 ),
               )),
               Positioned(
-                  top: 520.0,
+                  top: 700.0,
                   right: 15.0,
                   left: 15.0,
                   child: Padding(
@@ -72,7 +73,11 @@ class _SearchLocationState extends State<SearchLocation> {
                       color: kPrimaryColor,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                       child: Text("Set Location",style: TextStyle(color: Colors.white,fontSize: 15.0),),
-                      onPressed: (){print(origin.position);},
+                      onPressed: ()async{
+                        print(origin.position);
+                        await getCurrentAddress();
+                        Navigator.pop(context,origin.position);
+                        },
                     ),
                   ))
 
@@ -83,7 +88,7 @@ class _SearchLocationState extends State<SearchLocation> {
   
   searchAndNavigate()
   {
-      GeocodingPlatform.instance.locationFromAddress(searchAddress).then((result){
+    geoCo.GeocodingPlatform.instance.locationFromAddress(searchAddress).then((result){
         _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: LatLng(result[0].latitude,result[0].longitude),zoom: 10.0),
         ));
@@ -91,14 +96,36 @@ class _SearchLocationState extends State<SearchLocation> {
   }
   addMarker(LatLng latlng)
   {
+    origin=Marker(
+      markerId: MarkerId("Your location"),
+      infoWindow: InfoWindow(title:"Your location"),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      position: latlng,
+    );
+    print(latlng);
+    getCurrentAddress();
     setState(() {
-      origin=Marker(
-        markerId: MarkerId("Your location"),
-        infoWindow: InfoWindow(title:"Your location"),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-        position: latlng,
-      );
-      print(latlng);
+
     });
+  }
+  getCurrentAddress() async
+  {
+
+    List<geoCo.Placemark> address= await geoCo.GeocodingPlatform.instance.placemarkFromCoordinates(origin.position.latitude,origin.position.longitude);
+    var mainAddress=address[0];
+    searchAddress=mainAddress.locality.toString();
+    print(mainAddress);
+    if(mainAddress!=null) {
+      var MyAddress;
+      MyAddress =  "${mainAddress.name}";
+      MyAddress =  "$MyAddress ${mainAddress.subLocality}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.locality}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.country}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.postalCode}" ;
+
+      setState(() {
+        searchAddress=MyAddress;
+      });
+    }
   }
 }

@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geoCo;
@@ -17,7 +18,7 @@ class _FindParkingState extends State<FindParking> {
 
 
   GoogleMapController _googleMapController;
-  LatLng latlong=null;
+  LatLng latlong;
   CameraPosition _cameraPosition=CameraPosition(target: LatLng(0, 0),zoom: 10.0);
   String myAddress="Searching..";
   List<Marker> markers=[];
@@ -42,7 +43,9 @@ class _FindParkingState extends State<FindParking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(myAddress),
+        title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(myAddress)),
       ),
       body: (latlong!=null)?GoogleMap(
         myLocationButtonEnabled: false,
@@ -108,10 +111,11 @@ class _FindParkingState extends State<FindParking> {
     print(mainAddress);
     if(mainAddress!=null) {
       var MyAddress;
-      MyAddress =  "${mainAddress.subLocality}" ;
-      MyAddress =  "$MyAddress,${mainAddress.locality}" ;
-      MyAddress =  "$MyAddress,${mainAddress.country}" ;
-      MyAddress =  "$MyAddress,${mainAddress.postalCode}" ;
+      MyAddress =  "${mainAddress.name}";
+      MyAddress =  "$MyAddress, ${mainAddress.subLocality}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.locality}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.country}" ;
+      MyAddress =  "$MyAddress, ${mainAddress.postalCode}" ;
 
       setState(() {
         myAddress=MyAddress;

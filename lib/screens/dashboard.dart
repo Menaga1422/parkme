@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:parkme/screens/RegisterParkingArea/registrationOwner.dart';
 import 'package:parkme/screens/homepage.dart';
 import 'package:parkme/theme.dart';
+import 'package:parkme/utils/UserModel.dart';
+import 'package:parkme/utils/putNfetch.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -10,20 +14,39 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  UserModel? user;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchUserInfo().then((value) {
+      user = value;
+      setState(() {
+      });
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: (user==null)?Container():
+        SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(height: 30,),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,40,40,20),
+              child: Text("Hello ${user!.name},",style: GoogleFonts.dancingScript(color: kPrimaryColor,fontSize: 60,fontWeight: FontWeight.bold),),
+            ),
             Container(
               height: MediaQuery.of(context).size.height*(1/2),
               child: Image(
                 image: AssetImage("assets/globe.gif"),
               ),
             ),
-            SizedBox(height: 100,),
+            SizedBox(height: 30,),
             Container(
               height:50,
               width: MediaQuery.of(context).size.width*(3/4),
@@ -42,7 +65,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             SizedBox(height: 20,),
             TextButton(
-                onPressed: (){},
+                onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context) => RegisterOwner()));},
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

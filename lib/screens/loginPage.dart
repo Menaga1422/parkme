@@ -1,7 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:parkme/screens/dashboard.dart';
+import 'package:parkme/screens/registerPage.dart';
 import 'package:parkme/theme.dart';
+import 'package:parkme/utils/AuthenticationHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:parkme/utils/UserModel.dart';
 
 
 class LogIn extends StatefulWidget {
@@ -13,7 +17,6 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
 
-  String? _userid;
 
   TextEditingController _email = new TextEditingController();
   TextEditingController _password = new TextEditingController();
@@ -31,18 +34,20 @@ class _LogInState extends State<LogIn> {
               Text(
                 'ParkMe',
                 style: TextStyle(
+                  color: kPrimaryColor,
                   fontFamily: 'Lobster',
                   fontSize: 45,
                   fontWeight: FontWeight.w500,
 
                 ),
               ),
+              SizedBox(height: 100,),
               Container(
                 margin: EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: TextFormField(
                   controller: _email ,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.person,color: Theme.of(context).iconTheme.color),
                     labelText: 'Email',
                   ),
                 ),
@@ -53,22 +58,36 @@ class _LogInState extends State<LogIn> {
                   controller: _password ,
                   obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: Icon(Icons.lock,color: Theme.of(context).iconTheme.color),
                     labelText: 'Password',
                   ),
                 ),
               ),
+              SizedBox(height:30),
               Container(
                 margin: EdgeInsets.only(top: 25),
                 child: MaterialButton(
+                  elevation: 10.0,
                   padding: EdgeInsets.only(top: 10, bottom: 10,left: 30,right: 30),
-                  color: kPrimaryColor,
+                  color: kSecondaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                   onPressed: () async{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(),));
-                  },
+                    AuthenticationHelper()
+                        .signIn(email: _email.text, password: _password.text)
+                        .then((result) {
+                    if (result == null) {
+                      print(">>>>>>>>>>>>>>>Logged In");
+                      final FirebaseAuth auth = FirebaseAuth.instance;
+                      final User? user = auth.currentUser;
+
+                      UserModel? _user=UserModel();
+                      _user.userid=user!.uid;
+                      print(">>>>>>>>>>>>>>>user: "+ _user.userid);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard(),));
+                    }}
+                  );},
                   child: Text(
                     'Login',
                     style: TextStyle(
@@ -80,9 +99,9 @@ class _LogInState extends State<LogIn> {
               ),
               TextButton(
                 onPressed: (){
-
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Register(),));
                 },
-                child: Text('New User? Register Now'),
+                child: Text('New User? Register Now',style: TextStyle(color: kPrimaryColor),),
               )
             ],
           ),
