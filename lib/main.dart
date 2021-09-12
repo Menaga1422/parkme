@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:parkme/screens/Onboarding.dart';
 
 import 'package:parkme/screens/registerPage.dart';
 import 'package:parkme/theme.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme(),
-      home: Register(),
+      home: OnboardingScreen(),
     );
   }
 }

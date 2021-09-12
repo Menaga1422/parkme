@@ -1,11 +1,22 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class ParkingModel
 {
   String parkName;
+  String? _parkId;
+
+  set parkId(String? value) {
+    _parkId = value;
+  }
+
+  String? get parkId => _parkId;
   String contactNumber;
-  String location; //change to latlng
+  LatLng location; //change to latlng
   String price;
   String userId;
+  int totalSlots;
+  int availableSlots;
 
-  ParkingModel({required this.parkName,required this.contactNumber,required this.location,required this.price,required this.userId});
+  ParkingModel({required this.parkName,required this.contactNumber,required this.location,required this.price,required this.userId,required this.totalSlots,required this.availableSlots});
 
 }

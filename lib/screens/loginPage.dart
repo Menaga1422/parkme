@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:parkme/screens/dashboard.dart';
 import 'package:parkme/screens/registerPage.dart';
 import 'package:parkme/theme.dart';
@@ -27,19 +28,18 @@ class _LogInState extends State<LogIn> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: 50,left: 10),
+          margin: EdgeInsets.only(top: 200,left: 10),
           child: Column(
             children: [
 
               Text(
                 'ParkMe',
-                style: TextStyle(
-                  color: kPrimaryColor,
-                  fontFamily: 'Lobster',
-                  fontSize: 45,
-                  fontWeight: FontWeight.w500,
-
-                ),
+                style: GoogleFonts.lora(
+                    fontSize: 45,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w500,
+                    color: kPrimaryColor
+                )
               ),
               SizedBox(height: 100,),
               Container(

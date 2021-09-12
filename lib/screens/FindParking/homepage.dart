@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:parkme/screens/FindParking/screens/parkingMap.dart';
+import 'package:parkme/screens/FindParking/bookedInfo.dart';
+import 'package:parkme/screens/FindParking/booking.dart';
+import 'package:parkme/screens/FindParking/parkingMap.dart';
+import 'package:parkme/screens/FindParking/profile.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -14,7 +17,11 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex=0;
 
   var tabs=[
-    FindParking()];
+    FindParking(),
+    // Booking(),
+    BookedInfo(),
+    Profile(),
+  ];
 
   void _onItemTapped(int index)
   {

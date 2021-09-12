@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:parkme/screens/Components/DialogBox.dart';
+import 'package:parkme/screens/RegisterParkingArea/ownerhomepage.dart';
 import 'package:parkme/screens/RegisterParkingArea/searchLocation.dart';
 import 'package:parkme/theme.dart';
 import 'package:parkme/utils/AddParkingLot.dart';
@@ -31,8 +33,10 @@ class RegisterOwnerState extends State {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     ParkingModel parkLot = new ParkingModel(parkName: _parkingName.text,
         contactNumber: _contactNumber.text,
-        location: location!.toString(),
+        location: location!,
         price: _price.text,
+        totalSlots: int.parse(_slots.text),
+        availableSlots:int.parse(_slots.text),
         userId: userId);
     return parkLot;
   }
@@ -66,11 +70,11 @@ class RegisterOwnerState extends State {
                   child: TextFormField(
                     controller: _parkingName,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.person, color: Theme
+                      prefixIcon: Icon(Icons.local_parking, color: Theme
                           .of(context)
                           .iconTheme
                           .color),
-                      hintText: 'ParkingAreaName',
+                      hintText: 'ParkLot Name',
                     ),
                     validator: validateText,
                   ),
@@ -124,10 +128,11 @@ class RegisterOwnerState extends State {
                         MaterialPageRoute(
                             builder: (context) => SearchLocation()));
                     print(">>>>>>>>>>>>" + loc.toString());
-                    await getCurrentAddress();
                     setState(() {
                       location = loc;
                     });
+                    await getCurrentAddress();
+
                   },
                   child: Container(
                     height: 50,
@@ -167,40 +172,6 @@ class RegisterOwnerState extends State {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-                  padding: const EdgeInsets.all(3.0),
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2,
-                  decoration: new BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                      border: new Border.all(color: Colors.black38)
-                  ),
-                  child: Center(
-                    child: DropdownButton(
-                      hint: Text("Parking Type"),
-                      icon: Icon(Icons.arrow_drop_down, color: Theme
-                          .of(context)
-                          .iconTheme
-                          .color,),
-                      value: valuechoose,
-                      onChanged: (newValue) {
-                        setState(() {
-                          valuechoose = newValue as String;
-                        });
-                      },
-                      items: listItem.map((valueItem) {
-                        return DropdownMenuItem(
-                          value: valueItem,
-                          child: Text(valueItem),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                ),
                 SizedBox(height: 50),
                 Container(
                   width: MediaQuery
@@ -220,7 +191,9 @@ class RegisterOwnerState extends State {
                         print("Register Form valid");
                         ParkingModel parkLot = setParkLot();
                         putParkingInfo(parkLot);
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => LogIn(),));
+                        showDialog(context: context, builder: (BuildContext context){return DialogBox(title:"Parking Area Registered");});
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>OwnerHomePage()));
+
                       } else {
                         print("Register Form not valid");
                       }

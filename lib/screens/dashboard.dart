@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:parkme/screens/RegisterParkingArea/ownerhomepage.dart';
 import 'package:parkme/screens/RegisterParkingArea/registrationOwner.dart';
-import 'package:parkme/screens/homepage.dart';
+import 'package:parkme/screens/FindParking/homepage.dart';
 import 'package:parkme/theme.dart';
 import 'package:parkme/utils/UserModel.dart';
 import 'package:parkme/utils/putNfetch.dart';
@@ -65,11 +66,11 @@ class _DashboardState extends State<Dashboard> {
             ),
             SizedBox(height: 20,),
             TextButton(
-                onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context) => RegisterOwner()));},
+                onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context) => OwnerHomePage()));},
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Register your parking area",
+                    Text("Manage your parking area",
                       style: TextStyle(color:kPrimaryColor,fontSize: 18),
                       textAlign: TextAlign.center,),
                     Icon(Icons.navigate_next,color: kPrimaryColor,)

@@ -38,6 +38,8 @@ dependencies:
   firebase_auth: ^3.1.0
   cloud_firestore: ^2.5.1
   google_fonts: ^2.1.0
+  geoflutterfire: ^3.0.1
+  date_format: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -56,7 +58,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/globe.gif
+   - assets/images/
 
 
 

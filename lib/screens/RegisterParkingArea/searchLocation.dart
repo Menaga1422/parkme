@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geoCo;
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkme/theme.dart';
 
@@ -17,6 +18,14 @@ class _SearchLocationState extends State<SearchLocation> {
   GoogleMapController _googleMapController;
   Marker origin;
   String searchAddress;
+  LatLng myLocation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentLocation();
+  }
 
 
   @override
@@ -26,7 +35,7 @@ class _SearchLocationState extends State<SearchLocation> {
         children: <Widget>[
           GoogleMap(
               onMapCreated: (controller)=>_googleMapController=controller,
-              initialCameraPosition: CameraPosition(target: LatLng(51.5074,-0.1278),zoom: 8.0),
+              initialCameraPosition: CameraPosition(target: myLocation,zoom: 8.0),
               markers: {if(origin!=null) origin},
               onTap: (pos)=>addMarker(pos),
           ),
@@ -42,24 +51,25 @@ class _SearchLocationState extends State<SearchLocation> {
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white,
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: searchAddress,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15.0,top: 15.0),
-                    suffixIcon: IconButton(
-                        icon:Icon(Icons.search),
-                        color: kPrimaryColor,
-                        onPressed: searchAndNavigate,
-                    )
+                child: SingleChildScrollView(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: searchAddress,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15.0,top: 15.0),
+                      suffixIcon: IconButton(
+                          icon:Icon(Icons.search),
+                          color: kPrimaryColor,
+                          onPressed: searchAndNavigate,
+                      )
+                    ),
+                    onChanged: (value){
+                      setState(() {
+                        searchAddress=value;
+                      });
+                    },
                   ),
-                  onChanged: (value){
-                    setState(() {
-                      searchAddress=value;
-                    });
-                  },
-                ),
-              )),
+                ))),
               Positioned(
                   top: 700.0,
                   right: 15.0,
@@ -107,6 +117,21 @@ class _SearchLocationState extends State<SearchLocation> {
     setState(() {
 
     });
+  }
+  getCurrentLocation()async{
+    try{
+      await GeolocatorPlatform.instance.getCurrentPosition().then((value) {
+        setState(() {
+          print(value);
+          myLocation= LatLng(value.latitude, value.longitude);
+          print(myLocation);
+          addMarker(myLocation);
+      });});
+    }
+    catch(e)
+    {
+      print(e);
+    }
   }
   getCurrentAddress() async
   {

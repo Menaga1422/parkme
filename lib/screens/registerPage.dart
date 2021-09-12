@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:parkme/screens/dashboard.dart';
 import 'package:parkme/theme.dart';
 import 'package:parkme/screens/loginPage.dart';
@@ -42,7 +43,7 @@ class RegisterState extends State<Register>{
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Container(
-            margin: EdgeInsets.only(top: 50,left: 10),
+            margin: EdgeInsets.only(top: 100,left: 10),
             child: Form(
               key: _formkey,
               child: Column(
@@ -51,16 +52,14 @@ class RegisterState extends State<Register>{
                     alignment: Alignment.center,
                     child: Text(
                       'Create Account',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontFamily: 'Lobster',
-                        fontSize: 38,
-                        fontWeight: FontWeight.w500,
-
-                      ),
+                      style: GoogleFonts.lora(
+                        fontSize: 35,
+                        fontStyle: FontStyle.italic,
+                        color: kPrimaryColor
+                      )
                     ),
                   ),
-                  SizedBox(height: 35,),
+                  SizedBox(height: 65,),
                   Container(
                     margin: EdgeInsets.only(left: 20, right: 20, top: 10),
                     child: TextFormField(
@@ -160,7 +159,7 @@ class RegisterState extends State<Register>{
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LogIn(),));
                     },
-                    child: Text('Already have an account? Login',style: TextStyle(color: kPrimaryColor),),
+                    child: Text('Already have an account? Login',style: TextStyle(color: kPrimaryColor,fontSize: 15),),
                   )
                 ],
               ),
