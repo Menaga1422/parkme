@@ -13,10 +13,14 @@ import 'package:geocoding/geocoding.dart';
 
 
 class RegisterOwner extends StatefulWidget{
-  const RegisterOwner({Key? key}) : super(key: key);
-  RegisterOwnerState createState()=>RegisterOwnerState();
+  final String parkType;
+  const RegisterOwner({Key? key,required this.parkType}) : super(key: key);
+  RegisterOwnerState createState()=>RegisterOwnerState(parkType: this.parkType);
 }
 class RegisterOwnerState extends State {
+  String parkType;
+  RegisterOwnerState({required this.parkType});
+
   TextEditingController _parkingName = new TextEditingController();
   TextEditingController _contactNumber = new TextEditingController();
   TextEditingController _slots = new TextEditingController();
@@ -34,9 +38,10 @@ class RegisterOwnerState extends State {
     ParkingModel parkLot = new ParkingModel(parkName: _parkingName.text,
         contactNumber: _contactNumber.text,
         location: location!,
-        price: _price.text,
+        price: int.parse(_price.text),
         totalSlots: int.parse(_slots.text),
         availableSlots:int.parse(_slots.text),
+        parkingType: parkType,
         userId: userId);
     return parkLot;
   }
@@ -192,7 +197,10 @@ class RegisterOwnerState extends State {
                         ParkingModel parkLot = setParkLot();
                         putParkingInfo(parkLot);
                         showDialog(context: context, builder: (BuildContext context){return DialogBox(title:"Parking Area Registered");});
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>OwnerHomePage()));
+                        Future.delayed(Duration(seconds: 50), () {
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>OwnerHomePage()));
+                        });
+
 
                       } else {
                         print("Register Form not valid");

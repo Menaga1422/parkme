@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkme/screens/FindParking/parkLotDetails.dart';
+import 'package:parkme/screens/RegisterParkingArea/viewParkingUsers.dart';
 import 'package:parkme/utils/LocationHelpers.dart';
 import 'package:parkme/utils/ParkingModel.dart';
 
@@ -30,7 +32,14 @@ class _ViewParkingState extends State<ViewParking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ParkMe"),
+        title: Text("Parkme",
+          style: GoogleFonts.rochester(
+            fontSize: 30,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.5,
+          ),
+        ),
         centerTitle: true,
       ),
       body: (parkLot==null)?Container(
@@ -45,8 +54,8 @@ class _ViewParkingState extends State<ViewParking> {
             textAlign: TextAlign.center,
           ))
           :Container(
-        child:OwnerParkLotInfo(parkingModel: parkLot!,),
-      ),
+        child: OwnerParkLotInfo(parkingModel: parkLot!,),
+        ),
     );
   }
 
@@ -65,6 +74,7 @@ class _ViewParkingState extends State<ViewParking> {
           price: document.get("price"),
           totalSlots: document.get("totalSlots"),
           availableSlots: document.get("availableSlots"),
+          parkingType: document.get("parkingType"),
           userId: document.get("userId"));
       parkLot!.parkId=document.id;
     }
@@ -195,6 +205,39 @@ class _OwnerParkLotInfoState extends State<OwnerParkLotInfo> {
                     Icon(Icons.edit),
                     Text("Edit",style: TextStyle(fontSize: 20),)
                   ],
+                ),
+              ),
+              Divider(color: Colors.black54,),
+              Container(
+                height: 50,
+                padding: EdgeInsets.only(left: 30,right: 30),
+                decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: kSecondaryColor,
+                    borderRadius: BorderRadius.circular(10.0),
+
+                ),
+                child: InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ViewParkingUsers()));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Vehicles in your Parking',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
                 ),
               )
             ]));

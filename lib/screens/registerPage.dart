@@ -52,9 +52,10 @@ class RegisterState extends State<Register>{
                     alignment: Alignment.center,
                     child: Text(
                       'Create Account',
-                      style: GoogleFonts.lora(
+                      style: GoogleFonts.lato(
                         fontSize: 35,
-                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                        // fontStyle: FontStyle.italic,
                         color: kPrimaryColor
                       )
                     ),

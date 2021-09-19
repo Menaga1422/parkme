@@ -40,6 +40,10 @@ dependencies:
   google_fonts: ^2.1.0
   geoflutterfire: ^3.0.1
   date_format: ^2.0.4
+  simple_animations: ^3.2.0
+  razorpay_flutter: ^1.2.7
+  firebase_messaging: ^10.0.7
+  flutter_local_notifications: ^5.0.0+4
 
 dev_dependencies:
   flutter_test:

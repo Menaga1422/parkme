@@ -1,7 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:parkme/screens/loginPage.dart';
 import 'package:parkme/theme.dart';
+
+import '../main.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -11,6 +15,13 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   final List<Map<String, String>> splashData = [
     {
@@ -52,17 +63,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("ParkMe",
-        style: GoogleFonts.droidSerif(
-        fontSize: 25,
-        fontStyle: FontStyle.italic,
-        color: Colors.white,
-        fontWeight: FontWeight.w400
-        ),
-      ),
-        centerTitle: true,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: showNotification,
+      //   tooltip: 'Increment',
+      //   child: Icon(Icons.add),
+      // ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -76,28 +81,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     padding: const EdgeInsets.all(30.0),
                     child: Column(
                       children: <Widget>[
+                        Text("Parkme",
+                          style: GoogleFonts.rochester(
+                              fontSize: 45,
+                              fontWeight: FontWeight.w500,
+                              color: kPrimaryColor
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(top:30,bottom: 15.0),
                           child: Text(
                             splashData[index]['title']!,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: GoogleFonts.lato(
                               fontSize: 30,
-                              fontFamily: 'Lobster',
                               fontWeight: FontWeight.w800,
                               color: kPrimaryColor,
-                            ),
+                            )
                           ),
                         ),
                         Text(
                           splashData[index]['subtitle']!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.lato(
                             fontSize: 16,
-                            fontFamily: 'Lobster',
                             color: Colors.black,
                             height: 1.5,
-                          ),
+                          )
                         ),
                         Spacer(
                           flex: 2,
@@ -149,16 +159,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: TextButton.styleFrom(
                             primary: Colors.white,
                             backgroundColor: kSecondaryColor,
-                            textStyle: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
+                            textStyle: GoogleFonts.lato( fontSize: 20,
+                              fontWeight: FontWeight.w400,)),
                         child: Text(
                           _currentPage + 1 == splashData.length
                               ? 'Get Started'
                               : 'Continue',
-                          style: TextStyle(
-                            fontFamily: 'Lobster',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          // style: TextStyle(
+                          //   fontFamily: 'Lobster',
+                          //   fontSize: 20,
+                          //   fontWeight: FontWeight.w400,
+                          // ),
                         ),
 
                       ),

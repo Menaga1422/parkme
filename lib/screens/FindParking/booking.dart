@@ -1,13 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkme/screens/Components/DialogBox.dart';
 import 'package:parkme/screens/FindParking/homepage.dart';
+import 'package:parkme/screens/FindParking/payment.dart';
+import 'package:parkme/screens/FindParking/utils/fetchParkLots.dart';
 import 'package:parkme/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:parkme/utils/ParkingModel.dart';
+import 'dart:math';
 
 
 class Booking extends StatefulWidget {
@@ -50,6 +56,9 @@ class _BookingState extends State<Booking> {
   @override
   void initState() {
     super.initState();
+
+    _slotno.text=(Random().nextInt(widget.parklot.availableSlots) + 1).toString();
+
     _arrivalTime.text = formatDate(
         DateTime(2021, 08, 1, 0, 0),
         [hh, ':', nn, " ", am]).toString();
@@ -65,16 +74,17 @@ class _BookingState extends State<Booking> {
   Future putBookingDetails()async{
     print(">>>>>>>>>>>>>${widget.parklot.parkId}");
     String userID=FirebaseAuth.instance.currentUser!.uid;
-    Map<String,dynamic> bookDet={"slotNo":_slotno.text,"vehicleNo":_vehicleno.text,"contactNo":_contactno.text,
+    Map<String,dynamic> bookDet={"slotNo":_slotno.text ,"vehicleNo":_vehicleno.text,"contactNo":_contactno.text,
       "vehicleType":(vehicleSelections[0])?"Two Wheeler":"Four Wheeler","arrivalTime":_arrivalTime.text,
-      "duration":duration,"parkId":widget.parklot.parkId,
+      "duration":duration,"parkId":widget.parklot.parkId,"deptTime":_departTime.text,
     };
-    await FirebaseFirestore.instance..collection("Booking").doc(userID).set(bookDet);
+    FirebaseFirestore.instance..collection("Booking").doc(userID).set(bookDet);
     print(">>>>>>>>>>>>>>>>>>>>BOOKED");
     setState(() {
 
     });
   }
+
 
 
   @override
@@ -84,6 +94,7 @@ class _BookingState extends State<Booking> {
 
     dateTime = DateFormat.yMd().format(DateTime.now());
     Timeduration();
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -115,6 +126,7 @@ class _BookingState extends State<Booking> {
                     ),
                     validator: validateno,
                   ),
+
                 ),
 
 
@@ -310,7 +322,8 @@ class _BookingState extends State<Booking> {
                       if(_formkey.currentState!.validate()){
                         // print("Successful");
                         await putBookingDetails();
-                        showDialog(context: context, builder: (BuildContext context){return DialogBox(title:"Booked Successfully !!\nCheck your Booking tab");});
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>Pay(parklot: widget.parklot,duration: duration,)));
+                        // showDialog(context: context, builder: (BuildContext context){return DialogBox(title:"Booked Successfully !!\nCheck your Booking tab");});
 
                       }else{
                         print("Unsuccessful");

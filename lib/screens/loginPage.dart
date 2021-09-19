@@ -31,15 +31,13 @@ class _LogInState extends State<LogIn> {
           margin: EdgeInsets.only(top: 200,left: 10),
           child: Column(
             children: [
-
               Text(
-                'ParkMe',
-                style: GoogleFonts.lora(
-                    fontSize: 45,
-                    fontStyle: FontStyle.italic,
+                'Parkme',
+                style: GoogleFonts.rochester(
+                    fontSize: 55,
                     fontWeight: FontWeight.w500,
                     color: kPrimaryColor
-                )
+                ),
               ),
               SizedBox(height: 100,),
               Container(

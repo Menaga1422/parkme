@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:parkme/screens/RegisterParkingArea/registrationOwner.dart';
 import 'package:parkme/theme.dart';
 
@@ -15,7 +16,13 @@ class CompriState extends State<Compri>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ParkMe"),
+        title: Text("Parkme",
+          style: GoogleFonts.rochester(
+              fontSize: 35,
+              fontWeight: FontWeight.w500,
+              color: kPrimaryColor
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: kPrimaryColor,
@@ -34,7 +41,7 @@ class CompriState extends State<Compri>{
                     icon: Image.asset('assets/images/private.jpg',width: MediaQuery.of(context).size.width,),
                     iconSize: 300,
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>RegisterOwner(),));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>RegisterOwner(parkType: "Commercial"),));
                     },
                   ),
                   Positioned(
@@ -45,12 +52,11 @@ class CompriState extends State<Compri>{
                       color: kPrimaryColor.withOpacity(0.5),
                       child: Text(
                         'Private',
-                        style: TextStyle(
-                          fontFamily: 'Lobster',
+                        style: GoogleFonts.lato(
                           fontSize: 30,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                           color: Colors.white,
-                        ),
+                        )
                       ),
                     ),
                   ),
@@ -62,7 +68,7 @@ class CompriState extends State<Compri>{
                         icon: Image.asset('assets/images/commercial.png',),
                         iconSize: 300,
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterOwner(),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterOwner(parkType: "Commercial",),));
                         },
                       ),
                       Positioned(
@@ -73,12 +79,11 @@ class CompriState extends State<Compri>{
                           color: kPrimaryColor.withOpacity(0.5),
                           child: Text(
                             'Commercial',
-                            style: TextStyle(
-                              fontFamily: 'Lobster',
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white
-                            ),
+                              style: GoogleFonts.lato(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              )
                           ),
                         ),
                       ),

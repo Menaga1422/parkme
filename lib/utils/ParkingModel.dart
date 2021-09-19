@@ -12,11 +12,13 @@ class ParkingModel
   String? get parkId => _parkId;
   String contactNumber;
   LatLng location; //change to latlng
-  String price;
+  int price;
   String userId;
   int totalSlots;
   int availableSlots;
+  String parkingType;
 
-  ParkingModel({required this.parkName,required this.contactNumber,required this.location,required this.price,required this.userId,required this.totalSlots,required this.availableSlots});
+  ParkingModel({required this.parkName,required this.contactNumber,required this.location,
+    required this.price,required this.userId,required this.totalSlots,required this.availableSlots,required this.parkingType});
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:parkme/screens/FindParking/booking.dart';
 import 'package:parkme/utils/LocationHelpers.dart';
 import 'package:parkme/utils/ParkingModel.dart';
@@ -37,15 +38,26 @@ class _ParkLotInfoState extends State<ParkLotInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(left: 10, right: 20,top:20,bottom: 20),
-                child:Text(widget.parkingModel.parkName.toUpperCase()+" PARKING",
-                    style: TextStyle(
-                      fontFamily: 'Lobster',
-                      fontSize: 25,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black54,
+                margin: EdgeInsets.only(left: 15, right: 20,top:20,bottom: 10),
+                child:Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(widget.parkingModel.parkName.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: 'Lobster',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          color: kPrimaryColor,
 
-                    )
+                        )
+                    ),
+                    Text("${widget.parkingModel.parkingType} Parking",
+                        style: GoogleFonts.lato(
+                          fontSize: 20,
+                          color: Colors.black54
+                        )
+                    ),
+                  ],
                 ),
               ),
                 Padding(
@@ -90,10 +102,9 @@ class _ParkLotInfoState extends State<ParkLotInfo> {
                     Flexible(
                       child: Text(Address!,
                           maxLines: 2,
-                          style: TextStyle(
-                            fontFamily: 'Lobster',
+                          style: GoogleFonts.lato(
                             fontSize: 18,
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.w400,
                             color: Colors.black,
                           )
                       ),

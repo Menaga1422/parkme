@@ -38,8 +38,10 @@ class _DashboardState extends State<Dashboard> {
           children: <Widget>[
             SizedBox(height: 30,),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,40,40,20),
-              child: Text("Hello ${user!.name},",style: GoogleFonts.dancingScript(color: kPrimaryColor,fontSize: 60,fontWeight: FontWeight.bold),),
+              padding: const EdgeInsets.fromLTRB(40,50,40,20),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Hello ${user!.name},",style: GoogleFonts.lato(color: kPrimaryColor,fontSize: 40,fontWeight: FontWeight.bold),)),
             ),
             Container(
               height: MediaQuery.of(context).size.height*(1/2),

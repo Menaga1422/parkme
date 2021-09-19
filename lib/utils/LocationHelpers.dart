@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-Future getCurrentAddress(LatLng location) async
+Future<String> getCurrentAddress(LatLng location) async
 {
 
   List<Placemark> address= await GeocodingPlatform.instance.placemarkFromCoordinates(location.latitude,location.longitude);

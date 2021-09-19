@@ -26,7 +26,7 @@ class _FindParkingState extends State<FindParking> {
 
   GoogleMapController _googleMapController;
   LatLng myLocation;
-  CameraPosition _cameraPosition=CameraPosition(target: LatLng(0, 0),zoom: 13.0);
+  CameraPosition _cameraPosition=CameraPosition(target: LatLng(0, 0),zoom: 12.0);
   String myAddress="Searching..";
   TextEditingController searchAddress=TextEditingController();
   List<Marker> markers=[];
@@ -44,9 +44,11 @@ class _FindParkingState extends State<FindParking> {
     // TODO: implement initState
      super.initState();
 
-    _cameraPosition=CameraPosition(target: LatLng(0, 0),zoom: 13.0);
+    _cameraPosition=CameraPosition(target: LatLng(0, 0),zoom: 12.0);
     setMarkerImage();
     getLocationPermission();
+    getCurrentLocation();
+
   }
 
   setMarkerImage() async{
@@ -58,12 +60,12 @@ class _FindParkingState extends State<FindParking> {
     return Scaffold(
       // endDrawer: Container(child:Text("PArking location near YOu")),
       appBar: AppBar(
-        title: Text("ParkMe",
-          style: GoogleFonts.droidSerif(
-              fontSize: 25,
-              fontStyle: FontStyle.italic,
+        title: Text("Parkme",
+          style: GoogleFonts.rochester(
+              fontSize: 30,
               color: Colors.white,
-            fontWeight: FontWeight.w400
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.5,
           ),
         ),
         centerTitle: true,
@@ -76,6 +78,7 @@ class _FindParkingState extends State<FindParking> {
             initialCameraPosition:_cameraPosition,
             onMapCreated: (GoogleMapController controller)=>_googleMapController=controller,
             markers: Set.from(markers),
+
           ),
           Positioned(
               top: 10.0,
@@ -140,7 +143,6 @@ class _FindParkingState extends State<FindParking> {
         return Future.error('permission denied');
       }
     }
-    getCurrentLocation();
   }
 
   getCurrentLocation()async{
@@ -150,7 +152,7 @@ class _FindParkingState extends State<FindParking> {
           print(value);
           myLocation= LatLng(value.latitude, value.longitude);
           print(myLocation);
-          _cameraPosition=CameraPosition(target:myLocation,zoom: 13.0 );
+          _cameraPosition=CameraPosition(target:myLocation,zoom: 12.0 );
           print(_cameraPosition);
           if(_googleMapController!=null)
           _googleMapController.moveCamera(CameraUpdate.newCameraPosition(_cameraPosition));
@@ -203,6 +205,7 @@ class _FindParkingState extends State<FindParking> {
           price: element.get("price"),
           totalSlots: element.get("totalSlots"),
           availableSlots: element.get("availableSlots"),
+          parkingType: element.get("parkingType"),
           userId: element.get("userId"));
       parkLot.parkId=element.id;
       updateMarkers(parkLot, element.id);
@@ -220,7 +223,7 @@ class _FindParkingState extends State<FindParking> {
        print(result[0].toString());
        setState(() {
          _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-           CameraPosition(target: LatLng(result[0].latitude,result[0].longitude),zoom: 13.0),
+           CameraPosition(target: LatLng(result[0].latitude,result[0].longitude),zoom: 12.0),
          ));
       });
     });

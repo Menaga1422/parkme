@@ -1,22 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parkme/theme.dart';
+import 'package:intl/intl.dart';
 
-
-class Timer extends StatefulWidget {
-  final int levelClock;
-  const Timer({Key? key,required this.levelClock}) : super(key: key);
+class CustomTimer extends StatefulWidget {
+  const CustomTimer({Key? key}) : super(key: key);
 
   @override
-  _TimerState createState() => _TimerState();
+  _CustomTimerState createState() => _CustomTimerState();
 }
 
-class _TimerState extends State<Timer> with SingleTickerProviderStateMixin
-{
+class _CustomTimerState extends State<CustomTimer> with SingleTickerProviderStateMixin {
 
   AnimationController? _controller;
+  DateTime currentTime=DateTime.now();
+  int levelClock=0;
 
+  Future calcExpiryTime() async
+  {
+    String userID=FirebaseAuth.instance.currentUser!.uid;
+    String arrivalTime= await FirebaseFirestore.instance.collection("Booking").doc(userID).get()
+        .then((value) => value.get("arrivalTime"));
 
+    var df =  DateFormat("h:mm a");
+    var d = df.parse(arrivalTime); //change to arrival time
+    var dateFormat = DateFormat("yyyy-MM-dd");
+    String updatedDt = dateFormat.format(currentTime);
+    String t=updatedDt+" "+DateFormat('HH:mm').format(d);
+    DateTime at=DateFormat('yyyy-MM-dd HH:mm').parse(t);
+    print(">>>>>>>>>>>"+at.toString());
+    setState(() {
+      levelClock=at.difference(currentTime).inSeconds;
+    });
+    print(levelClock);
+    return levelClock;
+  }
 
   @override
   void dispose() {
@@ -28,15 +48,17 @@ class _TimerState extends State<Timer> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(
-          seconds:
-          widget
-              .levelClock), // gameData.levelClock is a user entered number elsewhere in the applciation
-    );
+    calcExpiryTime().whenComplete(() {
+      setState(() {
+        _controller = AnimationController(
+          vsync: this,
+          duration: Duration(
+              seconds: levelClock), // gameData.levelClock is a user entered number elsewhere in the applciation
+        );
+      });
+      _controller!.forward();
+    });
 
-    _controller!.forward();
   }
 
   void calltimer() {
@@ -46,13 +68,17 @@ class _TimerState extends State<Timer> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    if(levelClock<=0)
+    {
+       return Container();
+    }
     return Container(
       child: Container(
         child: Column(
           children: [
             Countdown(
               animation: StepTween(
-                begin: widget.levelClock, // THIS IS A USER ENTERED NUMBER
+                begin: levelClock, // THIS IS A USER ENTERED NUMBER
                 end: 0,
               ).animate(_controller!),
             ),
@@ -96,3 +122,4 @@ class Countdown extends AnimatedWidget {
     );
   }
 }
+
